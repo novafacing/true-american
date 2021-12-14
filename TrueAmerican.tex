@@ -1,0 +1,212 @@
+\documentclass[12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{mathptmx}
+\usepackage{forest}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{mwe}
+\usepackage{syntax}
+\usepackage{amsmath}
+\usepackage{etoolbox}
+\usepackage{minted}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+
+\usetikzlibrary{
+    arrows.meta,
+    arrows,
+    decorations.markings
+}
+
+\BeforeBeginEnvironment{minted}{\begin{tcolorbox}}%
+\AfterEndEnvironment{minted}{\end{tcolorbox}}%
+%\usemintedstyle{monokai}
+\newlength{\drop}
+\geometry{margin=.5in}
+
+\newlist{innerenum}{enumerate}{2}
+% \setlist[enumerate]{label=\thesection.\arabic{*}}
+\setlength{\grammarindent}{2cm} 
+
+\tikzstyle{cnode}=[
+    draw=black,
+    rectangle,
+    fill=blue!10,
+    text width=4cm
+]
+\newcommand\equalitytest[2]
+{
+    \ifdim#1pt=#2pt
+        1
+    \else
+        0
+    \fi
+}
+
+
+\begin{document}
+\begin{titlepage}
+    \drop=0.1\textheight
+    \centering
+    \vspace*{\baselineskip}
+    \rule{\textwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt}
+    \rule{\textwidth}{0.4pt}\\[\baselineskip]
+    {\LARGE True American \\[0.3\baselineskip] The Official Drinking Game}\\[0.2\baselineskip]
+    \rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt}
+    \rule{\textwidth}{1.6pt}\\[\baselineskip]
+    \scshape
+    \vspace*{2\baselineskip}
+    {\Large Gameplay by Sedona Hart\par}
+    {\itshape Manual by Rowan Hart\par}
+    \vspace*{2\baselineskip}
+    {\scshape \today} \\
+    \vfill
+\end{titlepage}
+
+\section{Overview} \label{overview}
+
+\textbf{True American} is a game in which the players are pieces on the game board, and progress through the game whilst becoming progressively more wasted. \\
+
+\begin{itemize}
+\item 4-10 Players
+\item Ages 21+
+\end{itemize}
+
+\subsection{Materials}
+
+Materials required to play \textbf{True American} include, but are not limited to: \\
+
+\begin{itemize}
+    \item 1 "\textit{King}", generally a handle of liquor, but if desired may be substituted for the same type of canned beverage as a \textit{Pawn}.
+    \item 2-4 "\textit{Pawns}" per player. Pawns should be a low-\% beverage, and should be in \textbf{cans if at all possible -- the cans MAY be thrown}.
+    \item 1 "\textit{Castle}", a (preferably low) table (like a coffee table).
+    \item 4 "\textit{Towers}" which should be chair or something similar to serve as the castle corners.
+    \item 12-16 "\textit{Cells}" or objects large enough to stand on (not necessarily comfortably). This can be almost anything: pillows, the three cushions of a couch could be three separate objects, et cetera.
+    \item 1 "\textit{Junkyard}", a trash can.
+\end{itemize}
+
+\pagebreak
+
+\section{Game Board} \label{board}
+
+The game board should be set up approximately as shown below. The movement order proceeds following the \textit{red} arrows: \\
+
+\begin{center}
+\begin{figure}[htb]
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}
+    \node[above] at (10, 15) {\LARGE Castle};
+    \draw (5,5) rectangle (15,15);
+    
+    \foreach[evaluate=\y using \x,evaluate=\z using (20-\x)] \x in {6,6.5,...,14} {
+        \ifnum \equalitytest{\x}{10} = 1
+        \draw (10,10) circle (.5);
+        \else
+        \draw (\x,\y) circle (.2);
+        \draw (\z,\x) circle (.2);
+        \fi
+    }
+    
+    \node[above] at (13,10) (K) {\Large King};
+    \node[above] at (7,10) (P) {\Large Pawns};
+    \draw[->] (K) to[bend right] (10.5,10);
+    \draw[->] (P) to[bend left] (6,13.8);
+    \draw[->] (P) to[bend left] (7,12.8);
+    \draw[->] (P) to[bend right] (8,11.8);
+    \draw[->] (P) to[bend right] (9,10.8);
+    
+    \node[rectangle,draw=black,minimum width=2cm,minimum height=2cm] at (3,3) (c1) {Tower};
+    \node[rectangle,draw=black,minimum width=2cm,minimum height=2cm] at (3,17) (c2) {Tower};
+    \node[rectangle,draw=black,minimum width=2cm,minimum height=2cm] at (17,17) (c3) {Tower};
+    \node[rectangle,draw=black,minimum width=2cm,minimum height=2cm] at (17,3) (c4) {Tower};
+    
+    \node[circle,draw=black,minimum size=2cm] at (-1,7) (l1) {Cell};
+    \node[circle,draw=black,minimum size=2cm] at (-2,10) (l2) {Cell};
+    \draw[->,red] (l1) to (l2);
+    \node[circle,draw=black,minimum size=2cm] at (-1,13) (l3) {Cell};
+    \draw[->,red] (l2) to (l3);
+    \draw[->,red] (l3) to (c2);
+    
+    \node[circle,draw=black,minimum size=2cm] at (21,7) (r1) {Cell};
+    \node[circle,draw=black,minimum size=2cm] at (22,10) (r2) {Cell};
+    \node[circle,draw=black,minimum size=2cm] at (21,13) (r3) {Cell};
+    \draw[->,red] (r3) to (r2);
+    \draw[->,red] (r2) to (r1);
+    \draw[->,red] (r1) to (c4);
+    
+    \node[circle,draw=black,minimum size=2cm] at (7,-1) (b1) {Cell};
+    \node[circle,draw=black,minimum size=2cm] at (10,-2) (b2) {Cell};
+    \node[circle,draw=black,minimum size=2cm] at (13,-1) (b3) {Cell};
+    \draw[->,red] (b3) to (b2);
+    \draw[->,red] (b2) to (b1);
+    \draw[->,red] (b1) to (c1);
+    
+    \node[circle,draw=black,minimum size=2cm] at (7,21) (u1) {Cell};
+    \node[circle,draw=black,minimum size=2cm] at (10,22) (u2) {Cell};
+    \draw[->,red] (u1) to (u2);
+    \node[circle,draw=black,minimum size=2cm] at (13,21) (u3) {Cell};
+    \draw[->,red] (u2) to (u3);
+    \draw[->,red] (u3) to (c3);
+    
+    \draw[->,red] (c1) to (l1);
+    \draw[->,red] (c2) to (u1);
+    \draw[->,red] (c3) to (r3);
+    \draw[->,red] (c4) to (b3);
+\end{tikzpicture}}
+\end{figure}
+\end{center}
+
+\section{Game Play} \label{play}
+
+\subsection{Starting the Game}
+
+To start the game, arrange the \textit{Castle}, \textit{King}, and \textit{Pawns} as shown on the board diagram in Section \ref{board}. Depending on the number of players, more or less \textit{Pawns} may be placed on the \textit{Castle} and more or less \textit{Cells} may be added (or removed) from the board. Less players = less \textit{Cells} and \textit{Pawns}. More \textit{Pawns} may also be added if a longer game is desired, regardless of player count. \\
+
+Once the board is set, each player should take a pawn and stand in a \textit{Cell}. An organizing player (this can be any player), then counts to three and yells "JFK!". All other players reply "FDR!" and begin chugging their \textit{Pawn}. The first player to finish their \textit{Pawn} goes first, and is given a new \textit{Pawn} before taking their first turn. After yelling "JFK!" the floor becomes lava and anyone touching the lava must take a \textit{Pawn} (see section \ref{penalty}).\\
+
+\subsection{Turn Progression} \label{progression}
+
+After the game starts and the player who goes first is chosen, play proceeds in a clockwise direction around the board. On each player's turn, they may choose one of the following options: \\
+
+\begin{enumerate}
+\item \textbf{Numbers}: The turn player says "Numbers!" then counts up to three. On three, all players hold up a number between one and five to their forehead. Any player who put up a number that no other player put up takes a drink and moves one space clockwise.
+\item \textbf{Categories}: The turn player says "Categories!" then shouts a category. This category can be anything, for example "Famous blonde people" or "Sea creatures". Then, starting from the next player clockwise from the turn player and proceeding clockwise around the board, each player must shout out something that fits the category. The first player who says something not belonging to the category or who cannot think of something to say when the turn comes to them must take a drink and move one space clockwise.
+\item \textbf{Question}: The turn player asks any question. Then, starting from the next player clockwise from the turn player and proceeding clockwise around the board, each player must either answer the question truthfully. If they prefer not to answer, they must take a drink and move one space.
+\item \textbf{Never Have I Ever}: The turn player says something that they have never done. Then, starting from the next player clockwise from the turn player and proceeding clockwise around the board, each player who \textbf{has} done whatever the turn player said must take a drink and move one space.
+\end{enumerate}
+
+Any of these games may be substituted with another similar mini-game, or additional mini-games may be simply added to this list as "house rules". Mini-games may also be removed, but having at least 3 is highly recommended. \\
+
+\subsection{Taking Penalty} \label{penalty}
+
+If a player does any of the following, they must take a \textit{Pawn}, and take a drink from it. \\
+
+\begin{itemize}
+\item Any time a player reaches a \textit{Tower} (except for when starting the game)
+\item Any time a player does not have any \textit{Pawns} and is called out by another player.
+\item Any time a player touches the lava.
+\end{itemize}
+
+If a player reaches a \textit{Tower} and they \textbf{already} have two non-empty \textit{Pawns}, they must: \\
+
+\begin{enumerate}
+\item Take a drink from the \textit{King}.
+\item Finish one of their two \textit{Pawns}.
+\item Take another \textit{Pawn} for reaching the corner.
+\end{enumerate}
+
+\subsection{Random Actions}
+
+There are two random actions that may happen at any time. \\
+
+\begin{enumerate}
+\item Any player, at any time, may shout "JFK!". All other players must respond by shouting "FDR!". Any player who does not respond in time must take a drink and move a space.
+\item Any player who finishes their \textit{Pawn} may shout "All the trash belongs?". All other players must respond by shouting "In the junkyard!". Any player who does not respond in time must take a drink and move a space. Any player who is holding an empty \textit{Pawn} \textbf{must} throw it from where they are standing into the \textit{Junkyard}. Any player who is accused of holding onto an empty \textit{Pawn} after this point must show that it is not empty. If it \textbf{is} empty, they must take a drink from the \textit{King} and take a new \textit{Pawn}. If it is \textbf{not} empty, the accuser must take a drink from the \textit{King}.
+\end{enumerate}
+
+\subsection{Winning the Game}
+
+When all \textit{Pawns} have been taken from the table, the next player who lands on a \textit{Tower} must take a drink from the \textit{King}. They then win the game. \\
+\end{document}
